@@ -1,8 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.options import Options
+import progressbar
 import pandas as pd
-import time
 
 options = Options()
 options.add_argument("headless")
@@ -13,7 +13,9 @@ table = driver.find_element(By.ID, 'bulletin_course_search_table')
 fields = table.find_element(By.TAG_NAME, 'tbody').find_elements(By.TAG_NAME, 'tr')
 field_urls = [field.find_element(By.TAG_NAME, 'td').find_element(By.TAG_NAME, 'a').get_attribute("href")  for field in fields]
 result = []
-for url in field_urls:
+bar = progressbar.ProgressBar(maxval=len(field_urls)).start()
+for i,url in enumerate(field_urls,start=0):
+    bar.update(i)
     driver.get(url)
     try:
         department = driver.find_element(By.CLASS_NAME, 'column_2_text').find_element(By.TAG_NAME,'h1').get_attribute('innerText')
@@ -29,7 +31,8 @@ for url in field_urls:
                 prerequisite = "No prerequisite"
             parsed_courses.append({
                 "department": department,
-                "name": department[:3] + " " + course.get_attribute("id") + ": " + course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1],
+                "id": department[:3] + " " + course.get_attribute("id"),
+                "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1],
                 "prerequisite": prerequisite,
                 "SBC": sbc,
                 "credits": course.find_elements(By.TAG_NAME, 'p')[-1].get_attribute("innerText")[0]
@@ -37,6 +40,7 @@ for url in field_urls:
         result += parsed_courses
     except:
         pass
+bar.finish()
 driver.quit()
 df = pd.DataFrame(result)
 df.to_csv("./courses.csv")
