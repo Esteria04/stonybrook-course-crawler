@@ -30,7 +30,7 @@ for i,url in enumerate(field_urls,start=0):
             if (len(prerequisite) == 0 or prerequisite[0] != "P"):
                 prerequisite = "No prerequisite"
             parsed_courses.append({
-                "department": department,
+                "department": department.replace('"',''),
                 "id": department[:3] + " " + course.get_attribute("id"),
                 "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1].replace('"',""),
                 "prerequisite": prerequisite,
