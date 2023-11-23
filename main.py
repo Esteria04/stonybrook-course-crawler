@@ -23,7 +23,7 @@ for i,url in enumerate(field_urls,start=0):
         parsed_courses = []
         for course in courses:
             try:
-                sbc = ", ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].parent.find_elements(By.TAG_NAME, 'a')])
+                sbc = " ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].find_element(By.XPATH, "..").find_elements(By.TAG_NAME, 'a')])
 
             except:
                 sbc = "No fulfillments"
