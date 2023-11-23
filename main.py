@@ -44,4 +44,4 @@ for i,url in enumerate(field_urls,start=0):
 bar.finish()
 driver.quit()
 df = pd.DataFrame(result)
-df.to_csv("./courses.csv",index = False)
+df.to_csv("./res/courses.csv",index = False)
