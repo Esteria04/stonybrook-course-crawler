@@ -26,14 +26,16 @@ for i,url in enumerate(field_urls,start=0):
                 sbc = " ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].find_element(By.XPATH, "..").find_elements(By.TAG_NAME, 'a')])
             except:
                 sbc = ""
-            prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText").replace('"',"")
+            prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText")
             if (len(prerequisite) == 0 or prerequisite[0] != "P"):
                 prerequisite = ""
+            elif (":" in prerequisite):
+                prerequisite = prerequisite.split(": ")[1]
             parsed_courses.append({
                 "department": department.replace('"',''),
                 "id": department[:3] + " " + course.get_attribute("id"),
                 "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1].replace('"',""),
-                "prerequisite": prerequisite.split(": ")[1],
+                "prerequisite": prerequisite,
                 "SBC": sbc,
                 "credits": course.find_elements(By.TAG_NAME, 'p')[-1].get_attribute("innerText")[0]
             })
