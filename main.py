@@ -18,22 +18,21 @@ for i,url in enumerate(field_urls,start=0):
     bar.update(i)
     driver.get(url)
     try:
-        department = driver.find_element(By.CLASS_NAME, 'column_2_text').find_element(By.TAG_NAME,'h1').get_attribute('innerText')
+        department = driver.find_element(By.CLASS_NAME, 'column_2_text').find_element(By.TAG_NAME,'h1').get_attribute('innerText').replace("\"","")
         courses = driver.find_elements(By.CLASS_NAME, 'course')
         parsed_courses = []
         for course in courses:
             try:
                 sbc = " ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].find_element(By.XPATH, "..").find_elements(By.TAG_NAME, 'a')])
-
             except:
                 sbc = "No fulfillments"
-            prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText")
+            prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText").replace("\"","")
             if (len(prerequisite) == 0 or prerequisite[0] != "P"):
                 prerequisite = "No prerequisite"
             parsed_courses.append({
                 "department": department,
                 "id": department[:3] + " " + course.get_attribute("id"),
-                "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1],
+                "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1].replace("\"",""),
                 "prerequisite": prerequisite,
                 "SBC": sbc,
                 "credits": course.find_elements(By.TAG_NAME, 'p')[-1].get_attribute("innerText")[0]
