@@ -25,10 +25,10 @@ for i,url in enumerate(field_urls,start=0):
             try:
                 sbc = " ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].find_element(By.XPATH, "..").find_elements(By.TAG_NAME, 'a')])
             except:
-                sbc = "No fulfillments"
+                sbc = ""
             prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText").replace('"',"")
             if (len(prerequisite) == 0 or prerequisite[0] != "P"):
-                prerequisite = "No prerequisite"
+                prerequisite = ""
             parsed_courses.append({
                 "department": department.replace('"',''),
                 "id": department[:3] + " " + course.get_attribute("id"),
