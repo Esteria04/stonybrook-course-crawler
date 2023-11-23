@@ -23,7 +23,7 @@ for i,url in enumerate(field_urls,start=0):
         parsed_courses = []
         for course in courses:
             try:
-                sbc = course.find_element(By.TAG_NAME, 'a').get_attribute("innerText")
+                sbc = ", ".join([s.get_attribute("innerText") for s in course.find_elements(By.TAG_NAME, 'span')[-1].find_elements(By.TAG_NAME, 'a')])
             except:
                 sbc = "No fulfillments"
             prerequisite = course.find_elements(By.TAG_NAME, 'p')[1].get_attribute("innerText")
@@ -43,4 +43,4 @@ for i,url in enumerate(field_urls,start=0):
 bar.finish()
 driver.quit()
 df = pd.DataFrame(result)
-df.to_csv("./courses.csv")
+df.to_excel("./courses.xlsx",index = False)
