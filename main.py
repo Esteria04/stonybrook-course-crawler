@@ -33,7 +33,7 @@ for i,url in enumerate(field_urls,start=0):
                 "department": department.replace('"',''),
                 "id": department[:3] + " " + course.get_attribute("id"),
                 "name": course.find_element(By.TAG_NAME, 'h3').get_attribute("innerText").split(":")[1].replace('"',""),
-                "prerequisite": prerequisite,
+                "prerequisite": prerequisite.split(": ")[1],
                 "SBC": sbc,
                 "credits": course.find_elements(By.TAG_NAME, 'p')[-1].get_attribute("innerText")[0]
             })
