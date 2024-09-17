@@ -45,6 +45,7 @@ for i,url in enumerate(field_urls,start=0):
         pass
 bar.finish()
 driver.quit()
+print(department_map)
 print("Step 2: Finding Optimal SBC Courses ... ")
 print("Enter all of the required courses using comma as a separator. (Including WRT and SNW)")
 print("Ex) >>> CSE 101, CSE 114, ... ,")
@@ -53,14 +54,19 @@ fulfilled_sbc = []
 required_sbc = set(["ARTS","GLO","HUM","LANG","QPS","SBS","SNW","TECH","USA","WRT","STAS","EXP+","HFA+","SBS+","STEM+","CER","DIV","ESI","SPK","WRTD"])
 for course in my_courses:
     for _, row in department_map[course.split(" ")[0]]:
-        if row["id"] == course:
-            fulfilled_sbc.append(row["SBC"])
+        print(row)
+        for a in row:
+            if a["id"] == course:
+                fulfilled_sbc.append(a["SBC"])
 required_sbc = list(required_sbc - set(fulfilled_sbc))
-selected_courses = []
-for sbc in required_sbc:
-    for department in department_map:
-        max_course = (0,0,0)
-        for _, row in department:
-            if sbc in row["SBC"].split() and len(row["SBC"].split(" ")) > max[0]:
-                max_course = (len(row["SBC"].split(" ")),row["id"],row["SBC"])
+
+print("You need to take the following SBC courses: ", required_sbc)
+
+# selected_courses = []
+# for sbc in required_sbc:
+#     for department in department_map:
+#         max_course = (0,0,0)
+#         for _, row in department:
+#             if sbc in row["SBC"].split() and len(row["SBC"].split(" ")) > max[0]:
+#                 max_course = (len(row["SBC"].split(" ")),row["id"],row["SBC"])
         
